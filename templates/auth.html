@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Create account' if mode == 'register' else 'Sign in' }} · TaskNest{% endblock %}
+{% block body %}
+<main class="auth-layout">
+  <section class="auth-story"><a class="brand" href="/">◈ <span>TaskNest</span></a><div class="story-content"><span class="eyebrow">A LITTLE STRUCTURE. A LOT OF POSSIBILITY.</span><h1>Make room<br>for what<br><em>matters.</em></h1><p>Your ideas, plans, and next steps.<br>One calm place to bring them together.</p><div class="sample-card"><span class="sample-check">✓</span><div>One thing at a time.<small>Small steps. Real progress.</small></div><span class="sample-star">✦</span></div></div><footer>Your day, thoughtfully organized.</footer></section>
+  <section class="auth-form"><div class="form-wrap"><span class="eyebrow green">YOUR PERSONAL WORKSPACE</span><h2>{{ 'Start something good.' if mode == 'register' else 'Welcome back.' }}</h2><p class="muted">{{ 'Create an account and give your plans a place to grow.' if mode == 'register' else 'Sign in to pick up where you left off.' }}</p>
+  {% for category, message in get_flashed_messages(with_categories=true) %}<div class="notice {{ category }}" role="alert">{{ message }}</div>{% endfor %}
+  <form method="post"><input type="hidden" name="csrf" value="{{ csrf_token() }}">
+  {% if mode == 'register' %}<label for="name">Your name</label><input id="name" name="name" maxlength="60" autocomplete="name" placeholder="Alex Morgan" required value="{{ request.form.get('name', '') }}">{% endif %}
+  <label for="email">Email address</label><input id="email" name="email" type="email" maxlength="254" autocomplete="email" placeholder="you@example.com" required value="{{ request.form.get('email', '') }}">
+  <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}" {% if mode == 'register' %}minlength="10"{% endif %} maxlength="128" placeholder="{{ 'At least 10 characters' if mode == 'register' else 'Enter your password' }}" required>
+  <button class="primary full" type="submit">{{ 'Create account' if mode == 'register' else 'Sign in' }} <span>→</span></button></form>
+  <p class="auth-switch">{{ 'Already have an account?' if mode == 'register' else 'New to TaskNest?' }} <a href="{{ url_for('login' if mode == 'register' else 'register') }}">{{ 'Sign in' if mode == 'register' else 'Create an account' }}</a></p><div class="privacy-note">◈ &nbsp; Your tasks are private to your account.</div></div></section>
+</main>
+{% endblock %}
